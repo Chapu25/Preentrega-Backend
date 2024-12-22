@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "title": "Nike",
+    "description": "Zapatillas de Nike deportivas",
+    "code": "CODE1",
+    "price": 200,
+    "status": true,
+    "stock": 10,
+    "category": "Running",
+    "thumbnail": "Thumbnail 1"
+  },
+  {
+    "id": 2,
+    "title": "Adidas",
+    "description": "Zapatillas de Adidas deportivas",
+    "code": "CODE2",
+    "price": 300,
+    "status": true,
+    "stock": 5,
+    "category": "Deportivas",
+    "thumbnail": "Thumbnail 2"
+  }
+]
