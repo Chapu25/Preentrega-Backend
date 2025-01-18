@@ -2,7 +2,7 @@ const socket = io();
 
 const productContainer = document.getElementById('product-list');
 
-// Inicializa la lista de productos al conectarse al servidor
+// Se Inicializa la lista de productos al conectarse al servidor
 socket.on('init', (products) => {
     products.forEach(product => {
         const li = createProduct(product);
@@ -11,12 +11,12 @@ socket.on('init', (products) => {
 });
 
 
-// Actualiza la lista completa de productos al recibir un evento
+// Se Actualiza la lista completa de productos al recibir un evento
 socket.on('updateProducts', (products) => {
-    
+
     productContainer.innerHTML = '';
 
-    // Vuelve a generar la lista con los productos actualizados
+    // Se Vuelve a generar la lista con los productos actualizados
     products.forEach(product => {
         const li = createProduct(product);
         productContainer.appendChild(li);
@@ -24,7 +24,7 @@ socket.on('updateProducts', (products) => {
 });
 
 
-// Crea un elemento <li> para un producto individual
+// SeCrea un nuevo producto en la lista
 function createProduct(product) {
     const li = document.createElement('li');
     li.innerHTML = `${product.title} - $${product.price}`;

@@ -38,16 +38,16 @@ export const io = new Server(server);
 io.on('connection', (socket) => {
     console.log('A user connected');
 
-    // Emite los productos al conectarse un nuevo cliente
+    
     socket.emit('init', productsService.products);
 
-    // Evento para debug o pruebas (opcional)
+    
     socket.on('disconnect', () => {
         console.log('A user disconnected');
     });
 });
 
-// Función para emitir productos actualizados a todos los clientes
+// Esta Función para emitir productos actualizados a todos los clientes
 export const emitUpdatedProducts = () => {
     io.emit('updateProducts', productsService.products);
 };
