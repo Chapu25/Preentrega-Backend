@@ -1,5 +1,7 @@
 
 import fs from "node:fs";
+import { io } from "../server.js";
+import { emitUpdatedProducts } from "../server.js";
 
 class ProductsService {
     path;
@@ -47,6 +49,7 @@ class ProductsService {
         this.products.push(newProduct);
         try {
             await this.saveOnFile();
+            io.emit('updateProducts', this.products);       // Envía la lista actualizada
             return newProduct;
         } catch (error) {
             console.error("Error al guardar el nuevo producto:", error);
@@ -71,6 +74,7 @@ class ProductsService {
 
         try {
             await this.saveOnFile();
+            io.emit('updateProducts', this.products);      // Envía la lista actualizada
             return product;
         } catch (error) {
             console.error("Error al actualizar el producto:", error);
@@ -88,6 +92,7 @@ class ProductsService {
 
         try {
             this.saveOnFile();
+            io.emit('updateProducts', this.products);         // Envía la lista actualizada
             return deletedProduct;
         } catch (error) {
             console.error("Error al eliminar el producto:", error);
@@ -148,6 +153,50 @@ const initialProducts = [
         stock: 12,
         category: "Deportivas",
         thumbnail: "Thumbnail 4",
+    },
+    {
+        id: 5,
+        title: "Asics",
+        description: "Zapatillas de Asics deportivas",
+        code: "CODE5",
+        price: 180,
+        status: true,
+        stock: 6,
+        category: "Running",
+        thumbnail: "Thumbnail 5",
+    },
+    {
+        id: 6,
+        title: "New Balance",
+        description: "Zapatillas de New Balance deportivas",
+        code: "CODE6",
+        price: 220,
+        status: true,
+        stock: 9,
+        category: "Deportivas",
+        thumbnail: "Thumbnail 6",
+    },
+    {
+        id: 7,
+        title: "Vans",
+        description: "Zapatillas de Vans deportivas",
+        code: "CODE7",
+        price: 190,
+        status: true,
+        stock: 7,
+        category: "Running",
+        thumbnail: "Thumbnail 7",
+    },
+    {
+        id: 8,
+        title: "Converse",
+        description: "Zapatillas de Converse deportivas",
+        code: "CODE8",
+        price: 210,
+        status: true,
+        stock: 11,
+        category: "Deportivas",
+        thumbnail: "Thumbnail 8",
     },
 ];
 

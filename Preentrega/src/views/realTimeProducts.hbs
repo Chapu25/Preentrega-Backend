@@ -1,0 +1,12 @@
+
+<h1>Lista de productos en tiempo real</h1>
+
+<ul class="collection" id="product-list">
+    {{#each products}}
+    <li class="collection" >{{this.title}} - ${{this.price}}</li>
+    {{/each}}
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+

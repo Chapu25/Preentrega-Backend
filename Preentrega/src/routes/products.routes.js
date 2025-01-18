@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { productsService } from "../managers/products.managers.js";
+import { io } from "../server.js";
+
 
 export const productRouter = Router();
 
@@ -20,7 +22,7 @@ productRouter.get("/api/products/:id", async (req, res) => {
     res.status(200).json(product);
 });
 
-productRouter.post("/api/products", async (req, res) => {
+productRouter.post("/", async (req, res) => {
     const { title, description, code, price, status, stock, category, thumbnail } = req.body;
 
     try {
@@ -35,6 +37,8 @@ productRouter.post("/api/products", async (req, res) => {
             category,
             thumbnail,
         });
+        io.emit('updateProducts', productsService.products);
+        /* io.emit('updateProducts', this.products); */
         res.status(201).json(newProduct);
     } catch (error) {
         console.error(error);
@@ -42,7 +46,7 @@ productRouter.post("/api/products", async (req, res) => {
     }
 });
 
-productRouter.put("/api/products/:id", async (req, res) => {
+productRouter.put("/:id", async (req, res) => {
     const { id } = req.params;
     const { title, description, code, price, status, stock, category, thumbnail } = req.body;
 
@@ -68,7 +72,7 @@ productRouter.put("/api/products/:id", async (req, res) => {
     }
 });
 
-productRouter.delete("/api/products/:id", async (req, res) => {
+productRouter.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     try {

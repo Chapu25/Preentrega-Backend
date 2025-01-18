@@ -20,5 +20,60 @@
     "stock": 5,
     "category": "Deportivas",
     "thumbnail": "Thumbnail 2"
+  },
+  {
+    "id": 3,
+    "title": "Puma",
+    "description": "Botines de Puma",
+    "code": "CODE3",
+    "price": 150,
+    "status": true,
+    "stock": 8,
+    "category": "Running",
+    "thumbnail": "Thumbnail 3"
+  },
+  {
+    "id": 4,
+    "title": "Reebok",
+    "description": "Zapatillas de Reebok deportivas",
+    "code": "CODE4",
+    "price": 250,
+    "status": true,
+    "stock": 8,
+    "category": "Deportivas",
+    "thumbnail": "Thumbnail 4"
+  },
+  {
+    "id": 5,
+    "title": "Asics",
+    "description": "Zapatillas de Asics deportivas",
+    "code": "CODE5",
+    "price": 180,
+    "status": true,
+    "stock": 6,
+    "category": "Running",
+    "thumbnail": "Thumbnail 5"
+  },
+  {
+    "id": 6,
+    "title": "New Balance",
+    "description": "Zapatillas de New Balance deportivas",
+    "code": "CODE6",
+    "price": 220,
+    "status": true,
+    "stock": 9,
+    "category": "Deportivas",
+    "thumbnail": "Thumbnail 6"
+  },
+  {
+    "id": 7,
+    "title": "LaCoste",
+    "description": "Zapatillas de LaCoste elegantes",
+    "code": "CODE7",
+    "price": 300,
+    "status": true,
+    "stock": 3,
+    "category": "Elegantes",
+    "thumbnail": "Thumbnail 7"
   }
 ]
