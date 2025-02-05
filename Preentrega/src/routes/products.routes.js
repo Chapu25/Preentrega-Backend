@@ -1,16 +1,56 @@
 import { Router } from "express";
 import { productsService } from "../managers/products.managers.js";
 import { io } from "../server.js";
+import { productModel } from "../models/products.model.js";
 
 
 export const productRouter = Router();
 
 
-
 productRouter.get("/", async (req, res) => {
-    const products = await productsService.getAll();
-    res.status(200).json(products);
+
+    
+    try {
+        const { limit = 10, page = 1, query } = req.query;
+
+        // Crear filtro basado en query 
+        let filter = {};
+        if (query) {
+            filter.category = query;
+        }
+
+
+        // Configuración de paginación
+        const options = {
+            page: Number(page),
+            limit: Number(limit),
+            lean: true, 
+        };
+
+
+        // Obtener productos paginados
+        const productosdb = await productModel.paginate(filter, options);
+
+        console.log("Productos paginados:", productosdb.docs.length);
+
+        res.status(200).json({
+            status: "success",
+            payload: productosdb.docs, 
+            totalPages: productosdb.totalPages,
+            prevPage: productosdb.prevPage,
+            nextPage: productosdb.nextPage,
+            page: productosdb.page,
+            hasPrevPage: productosdb.hasPrevPage,
+            hasNextPage: productosdb.hasNextPage,
+        });
+
+    } catch (error) {
+        console.error("Error al obtener productos:", error);
+        res.status(500).json({ error: "Error al obtener productos" });
+    }
 });
+
+
 
 
 productRouter.get("/api/products/:id", async (req, res) => {
@@ -38,7 +78,6 @@ productRouter.post("/", async (req, res) => {
             thumbnail,
         });
         io.emit('updateProducts', productsService.products);
-        /* io.emit('updateProducts', this.products); */
         res.status(201).json(newProduct);
     } catch (error) {
         console.error(error);

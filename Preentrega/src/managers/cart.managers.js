@@ -1,71 +1,86 @@
 import fs from 'node:fs';
+import { Cart } from '../models/carts.model.js';
+import { productModel } from '../models/products.model.js';
+import mongoose from 'mongoose';
 
 class CartsService {
-    path;
-    carts = [];
+    
 
-    constructor({ path, initialCarts = [] }) {
-        this.path = path;
-
-        
-        if (fs.existsSync(this.path)) {
-            try {
-                this.carts = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
-            } catch (error) {
-                console.error('Error leyendo el archivo. Inicializando carritos con array vacío.');
-                this.carts = initialCarts;
-            }
-        } else {
-            
-            this.carts = initialCarts;
-        }
-    }
-
-    async getAll() {
-        return this.carts;
-    }
-
-    async getById(id) {
-        return this.carts.find((cart) => cart.id === parseInt(id));
-    }
-
-    async create() {
-        const id = this.carts.length > 0 ? this.carts[this.carts.length - 1].id + 1 : 1;
-        const newCart = {
-            id,
-            products: [],
-        };
-        this.carts.push(newCart);
-        await this.saveOnFile();
-        return newCart;
-    }
-
-    async addProductToCart(cid, pid) {
-        const cart = await this.getById(cid);
-        if (!cart) return null;
+//=======================================================================================================
 
 
-        const existingProduct = cart.products.find((prod) => prod.product === pid);
-        if (existingProduct) {
-            existingProduct.quantity += 1; 
-        } else {
-            
-            cart.products.push({ product: pid, quantity: 1 });
+
+async getAll() {
+    return await Cart.find();
+}
+
+async getById(id) {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.error("ID no válido:", id);
+            return null;
         }
 
-        await this.saveOnFile();
+        const cart = await Cart.findById(id).populate('products.product'); 
+        if (!cart) {
+            console.error("Carrito no encontrado en la base de datos.");
+            return null;
+        }
+
         return cart;
-    }
-
-    async saveOnFile() {
-        try {
-            await fs.writeFileSync(this.path, JSON.stringify(this.carts, null, 2));
-        } catch (error) {
-            console.error('Error al guardar en el archivo:', error);
-        }
+    } catch (error) {
+        console.error("Error al obtener el carrito:", error);
+        return null;
     }
 }
 
+async create() {
+    const newCart = new Cart({ products: [] });
+    return await newCart.save();
+}
+
+async addProductToCart(cid, pid, quantity = 1) {
+    const cart = await Cart.findById(cid);
+    if (!cart) return null;
+
+    const existingProduct = cart.products.find(p => p.product.toString() === pid);
+    if (existingProduct) {
+        existingProduct.quantity += quantity;
+    } else {
+        cart.products.push({ product: pid, quantity });
+    }
+
+    return await cart.save();
+}
+
+async removeProductFromCart(cid, pid) {
+    const cart = await Cart.findById(cid);
+    if (!cart) return null;
+
+    cart.products = cart.products.filter(p => p.product.toString() !== pid);
+    return await cart.save();
+}
+
+async deleteById(id) {
+    return await Cart.findByIdAndDelete(id);
+}
+
+async updateProductQuantity(cid, pid, quantity) {
+    const cart = await Cart.findById(cid);
+    if (!cart) return null;
+
+    const product = cart.products.find(p => p.product.toString() === pid);
+    if (product) {
+        product.quantity = quantity;
+    }
+
+    return await cart.save();
+}
+
+        
+} 
+
+    
 
 const initialCarts = [];
 
@@ -73,3 +88,11 @@ export const cartsService = new CartsService({
     path: './src/db/cart.json',
     initialCarts,
 });
+
+
+
+
+
+
+
+
